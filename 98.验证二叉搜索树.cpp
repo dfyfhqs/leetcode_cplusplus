@@ -59,13 +59,33 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+#include <limits.h>  // for LONG_MIN
 class Solution {
 public:
+    long long lastValue_ = LONG_MIN;
     bool isValidBST(TreeNode* root) {
         return helper(root);
+        //return helper1(root);
     }
 
+    // 使用二叉搜索树中序遍历判断是否递增
     bool helper(TreeNode* root) {
+        if (root == nullptr) {
+            return true;
+        }
+        // inorder
+        if (!helper(root->left)) {
+            return false;
+        }
+        if (lastValue_ >= root->val) {
+            return false;
+        }
+        lastValue_ = root->val;
+        return helper(root->right);
+    }
+
+
+    bool helper1(TreeNode* root) {
         if (root == nullptr) {
             return true;
         }
