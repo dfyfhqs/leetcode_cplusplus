@@ -19,7 +19,34 @@
 class Solution {
 public:
     int minDepth(TreeNode* root) {
-        return DFS(root);
+        //return DFS(root);
+        return BFS(root);
+    }
+
+    int BFS(TreeNode* root) {
+        if (root == nullptr) {
+            return 0;
+        }
+        queue<TreeNode*> q;
+        q.push(root);
+        int depth = 0;
+        while(!q.empty()) {
+            auto width = q.size();
+            depth += 1;
+            for (auto i = 0; i < width; ++i) {
+                if ((q.front()->left == nullptr) && (q.front()->right == nullptr)) {
+                    return depth;
+                }
+                if (q.front()->left) {
+                    q.push(q.front()->left);
+                }
+                if (q.front()->right) {
+                    q.push(q.front()->right);
+                }
+                q.pop();
+            }
+        }
+        return depth;
     }
 
     int DFS(TreeNode* root) {
