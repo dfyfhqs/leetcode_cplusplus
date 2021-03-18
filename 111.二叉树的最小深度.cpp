@@ -19,15 +19,15 @@
 class Solution {
 public:
     int minDepth(TreeNode* root) {
-        return BFS(root);
+        return DFS(root);
     }
 
-    int BFS(TreeNode* root) {
+    int DFS(TreeNode* root) {
         if (root == nullptr) {
             return 0;
         }
-        auto leftDepth = BFS(root->left);
-        auto rightDepth = BFS(root->right);
+        auto leftDepth = DFS(root->left);
+        auto rightDepth = DFS(root->right);
         if (leftDepth == 0) {
             return 1 + rightDepth;
         }
