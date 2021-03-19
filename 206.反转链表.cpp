@@ -18,7 +18,8 @@
 class Solution {
 public:
     ListNode* reverseList(ListNode* head) {
-        return normalReverseList(head);
+        //return normalReverseList(head);
+        return RecursiveReverseList(head);
     }
 
     ListNode* normalReverseList(ListNode* head) {
@@ -32,7 +33,20 @@ public:
             pre.next = head;
             head = next;
         }
-        return pre./Users/mac/code/gitlab/leetcode_cplusplus/206.反转链表.cppnext;
+        return pre.next;
+    }
+
+    ListNode* RecursiveReverseList(ListNode* head) {
+        if (head == nullptr) {
+            return nullptr;
+        }
+        if (head->next == nullptr) {
+            return head;
+        }
+        auto lastHead = RecursiveReverseList(head->next);
+        head->next->next = head;
+        head->next = nullptr;
+        return lastHead;
     }
 };
 // @lc code=end
