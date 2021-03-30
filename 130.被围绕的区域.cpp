@@ -4,11 +4,77 @@
  * [130] 被围绕的区域
  */
 
+// 并查集
+class UnionFind {
+public:
+    UnionFind(int n) {
+        for(auto i = 0； i < n; ++i) {
+            parent_.emplace_back(i);
+            count_ = n;
+            size_.emplace_back(1);
+        }
+    }
+
+    void Connect(int n, int m) {
+        int rootN = find(n);
+        int rootM = find(m);
+        if (rootN == rootM) {
+            return;
+        }
+
+        if (size_[n] < size_[m]) {
+            parent_[n] = rootM;
+            size_[rootM] += size_[n];
+        } elese {
+            parent_[m] = rootN;
+            size_[rootN] += size_[m];
+        }
+        count_ -= 1;
+    }
+
+    bool IsConnected(int n, int m) {
+        int parentN = find(n);
+        int parentM = find(m);
+        return parentN == parentM;
+    }
+
+private:
+    int find(int n) {
+        while (parent_[n] != n) {
+            parent[n] = parent[parent[n]];
+            n = parent[n];
+        }
+        return n;
+    }
+
+private:
+    std::vector<int> parent_; // 记录顶点
+    std::vector<int> size_; // 权重
+    int count_;
+};  // class UnionFind
+
+
 // @lc code=start
 class Solution {
 public:
     void solve(vector<vector<char>>& board) {
         normalSolve(board);
+    }
+
+    void UFSolve(vector<vector<char>>& board) {
+        int row = board.size();
+        if (row == 0) {
+            return;
+        }
+        int col = board[0].size();
+        if (col == 0) {
+            return;
+        }
+
+        UnionFind uf(row * col + 1);
+
+        for (auto i = 0; i < )
+
     }
 
     bool checkIsConnect(vector<vector<char>>& board, int i, int j) {
