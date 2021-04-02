@@ -4,11 +4,17 @@
  * [130] 被围绕的区域
  */
 
+
+
+
+// @lc code=start
+
+
 // 并查集
 class UnionFind {
 public:
     UnionFind(int n) {
-        for(auto i = 0； i < n; ++i) {
+        for(auto i = 0; i < n; ++i) {
             parent_.emplace_back(i);
             count_ = n;
             size_.emplace_back(1);
@@ -22,12 +28,12 @@ public:
             return;
         }
 
-        if (size_[n] < size_[m]) {
-            parent_[n] = rootM;
-            size_[rootM] += size_[n];
-        } elese {
-            parent_[m] = rootN;
-            size_[rootN] += size_[m];
+        if (size_[rootN] < size_[rootM]) {
+            parent_[rootN] = rootM;
+            size_[rootM] += size_[rootN];
+        } else {
+            parent_[rootM] = rootN;
+            size_[rootN] += size_[rootM];
         }
         count_ -= 1;
     }
@@ -41,8 +47,8 @@ public:
 private:
     int find(int n) {
         while (parent_[n] != n) {
-            parent[n] = parent[parent[n]];
-            n = parent[n];
+            parent_[n] = parent_[parent_[n]];
+            n = parent_[n];
         }
         return n;
     }
@@ -53,12 +59,11 @@ private:
     int count_;
 };  // class UnionFind
 
-
-// @lc code=start
 class Solution {
 public:
     void solve(vector<vector<char>>& board) {
-        normalSolve(board);
+        //normalSolve(board);
+        UFSolve(board);
     }
 
     void UFSolve(vector<vector<char>>& board) {
@@ -71,9 +76,56 @@ public:
             return;
         }
 
+        auto pos = [&row, &col](int i, int j)  -> int {
+            return i * col + j;
+        };
+
         UnionFind uf(row * col + 1);
 
-        for (auto i = 0; i < )
+        for (auto i = 0; i < row; ++i) {
+            if (board[i][0] == 'O') {
+                uf.Connect(pos(i,0), pos(row-1,col-1));
+            }
+
+            if (board[i][col-1] == 'O') {
+                uf.Connect(pos(i,col-1), pos(row-1, col-1));
+            }
+        }
+
+        for (auto i = 0; i < col; ++i) {
+            if (board[0][i] == 'O') {
+                uf.Connect(pos(0,i) , pos(row-1, col-1));
+            }
+
+            if (board[row-1][i] == 'O') {
+                uf.Connect(pos(row-1, i), pos(row-1, col-1));
+            }
+        }
+
+        std::vector<std::tuple<int,int>> checkItem;
+        checkItem.emplace_back(std::make_tuple(1,0));
+        checkItem.emplace_back(std::make_tuple(0,1));
+        checkItem.emplace_back(std::make_tuple(0,-1));
+        checkItem.emplace_back(std::make_tuple(-1,0));
+        for (auto i = 1; i < row-1; ++i) {
+            for (auto j = 1; j < col-1; ++j) {
+                if (board[i][j] == 'O') {
+                    for(auto k = 0; k < checkItem.size(); ++k) {
+                        if (board[i+std::get<0>(checkItem[k])][j+std::get<1>(checkItem[k])] == 'O') {
+                            uf.Connect(pos(i+std::get<0>(checkItem[k]), j+std::get<1>(checkItem[k])), pos(i,j));
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int i = 1; i < row - 1; i++) {
+            for (int j = 1; j < col - 1; j++) {
+                if (!uf.IsConnected(pos(row-1, col-1), pos(i,j))) {
+                    board[i][j] = 'X';
+                }
+            }
+        }
 
     }
 
@@ -138,5 +190,6 @@ public:
     }
 
 };
+
 // @lc code=end
 
