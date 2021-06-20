@@ -7,11 +7,16 @@
 // @lc code=start
 class Solution {
 public:
+    unordered_map<int, int> amount_map_;
     int coinChange(vector<int>& coins, int amount) {
         return dp(coins, amount);
     }
 
     int dp(const vector<int>& coins, int amount) {
+        auto findIter = amount_map_.find(amount);
+        if (findIter != amount_map_.end()) {
+            return findIter->second;
+        }
         if (amount == 0) {
             return 0;
         }
@@ -26,10 +31,12 @@ public:
             }
             res = min(res, subproblem + 1);
         }
-        if (res < INT_MAX) {
-            return res;
+        auto result = res;
+        if (res == INT_MAX) {
+            result = -1;
         }
-        return -1;
+        amount_map_[amount] = result;
+        return result;
 
     }
 };
