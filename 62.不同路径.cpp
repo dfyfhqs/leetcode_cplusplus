@@ -67,22 +67,13 @@
 class Solution {
 public:
     int uniquePaths(int m, int n) {
-        int result = 0;
-        help(m, n, 0, 0, &result);
-        return result;
-    }
-
-    void help(int m, int n, int startx, int starty, int* result) {
-        cout << startx << ", " << starty << endl;
-        if (startx < m) {
-            (*result) += 1;
-            help(m, n, startx+1, starty, result);
+       vector<vector<int>> result(m, vector<int>(n, 1));
+        for (size_t i = 1; i < m; ++i) {
+            for (size_t j = 1; j < n; ++n) {
+                result[i][j] = result[i-1][j] + result[i][j-1];
+            }
         }
-        if (starty < n) {
-            (*result) += 1;
-            help(m,n, startx, starty+1, result);
-        }
-        return;
+        return result[m-1][n-1];
     }
 };
 // @lc code=end
