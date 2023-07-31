@@ -8,12 +8,66 @@
  *
  * [42] 接雨水
  */
+#include <stack>
+#include <vector>
 
+// 1. 单调栈 2. 双指针
 // @lc code=start
 class Solution {
 public:
-    int trap(vector<int>& height) {
 
+    int trap(vector<int>& height) {
+      int left = 0, right = height.size() - 1, result = 0;
+      int leftMax = height[left], rightMax = height[right];
+      while (left <= right) {
+        if (leftMax < rightMax) {
+          if (height[left] < leftMax) {
+            result += leftMax - height[left];
+          } else {
+            leftMax = height[left];
+          }
+          ++left;
+        } else {
+          if (height[right] < rightMax) {
+            result += rightMax - height[right];
+          } else {
+            rightMax = height[right];
+          }
+          --right;
+        }
+      }
+      return result;
+    }
+    
+    int trapstack(vector<int>& height) {
+      int result = 0;
+      std::vector<int> stack;
+      for (size_t i = 0; i < height.size(); ++i) {
+        std::cout << "i: " << i << std::endl;
+        if (stack.empty()) {
+          stack.push_back(i);
+          continue;
+        }
+
+        if (height[stack.back()] >= height[i]) {
+          stack.push_back(i);
+          continue;
+        }
+
+        while (!stack.empty() && height[stack.back()] < height[i]) {
+          int curheight = height[stack.back()];
+          stack.pop_back();
+          if (stack.empty()) {
+            break;
+          }
+          int left = height[stack.back()];
+          std::cout << "left: " << left << " stack.back: " << stack.back() << std::endl;
+          result += (min(left, height[i]) - curheight) * (i - stack.back() - 1);
+        }
+        stack.emplace_back(i);
+        std::cout << "  result: " << result << std::endl;
+      }
+      return result;
     }
 };
 // @lc code=end
