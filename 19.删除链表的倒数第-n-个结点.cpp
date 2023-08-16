@@ -18,29 +18,32 @@
 class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-      if (head == nullptr) return head;
-      ListNode* first, *second;
-      first = second = head;
-      while ((second != nullptr) && (n-- > 0)) {
-        second = second->next;
+      auto end = head;
+      auto pre = head;
+      int count = 0;
+      while (count < n && end != nullptr) {
+        end = end->next;
+        ++count;
       }
 
-      // n > 队列长度
-      if (n > 0) {
-        return head;
+      if (count < n) {
+        return nullptr;
       }
 
-      // n == 队列长度 则删除头结点
-      if (second == nullptr) {
+      if (end == nullptr) {
         return head->next;
       }
 
-      // n < 队列长度，获取倒数n+1个节点，删除倒数n个点解
-      while (second->next != nullptr) {
-        second = second->next;
-        first = first->next;
+      while(end != nullptr && end->next != nullptr) {
+        pre = pre->next;
+        end = end->next;
+        //std::cout << end->val << std::endl;
       }
-      first->next = first->next->next;
+
+      //std::cout << pre->next->val;
+      if (pre != nullptr && pre->next != nullptr) {
+        pre->next = pre->next->next;
+      }
       return head;
     }
 };
