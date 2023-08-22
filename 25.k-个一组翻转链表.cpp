@@ -1,4 +1,12 @@
 /*
+ * @Author: stone stone
+ * @Date: 2023-08-03 23:35:47
+ * @LastEditors: stone stone
+ * @LastEditTime: 2023-08-20 20:09:08
+ * @FilePath: /leetcode_cplusplus/25.k-个一组翻转链表.cpp
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
+/*
  * @lc app=leetcode.cn id=25 lang=cpp
  *
  * [25] K 个一组翻转链表
@@ -19,45 +27,38 @@ class Solution {
 public:
     ListNode* reverseKGroup(ListNode* head, int k) {
       if (head == nullptr || k == 1) return head;
-
-      head = new ListNode(0, head);
-      ListNode* node = head;
-      ListNode* cur = head->next;
+      ListNode* start = head, *end = head;
+      ListNode* result = nullptr;
       int count = 0;
-      ListNode *label = nullptr;
-      while ((count++ < k) && (cur != nullptr)) { 
-        if (count == 1) {
-          label = cur;
-          cur = cur->next;
-          label->next = nullptr;
-          continue;
-        }
-
-        auto* tmpCur = cur->next;
-        cur->next = node->next;
-        node->next = cur;
-        cur = tmpCur;
-        label->next = cur;
-
-        if ((cur != nullptr) && (count == k)) {
+      while (end != nullptr) {
+        if (count == k) {
+          end = end->next;
           count = 0;
-          node = label;
+          auto* curhead = Reverse(start, end);
+          if (result != nullptr) {
+            result = curhead;
+          }
+          start->next = Reverse(start, end);
+          start = end;
+        } else if (count < k) {
+          end = end + 1;
+          count++;
         }
       }
-
-      if (count <= k) {
-        cur = node->next->next;
-        node->next->next = nullptr;
-        while(cur != nullptr) {
-          auto* tmp = cur->next;
-          cur->next = node->next;
-          node->next = cur;
-          cur = tmp;
-        }
-
-      }
-      return head->next;
+      return result;
     }
+
+    ListNode* Reverse(ListNode* start, ListNode* end) {
+      ListNode* pre = nullptr, *cur = start, *next = start;
+      while (start != end) {
+        next = cur->next;
+        cur->next = pre;
+        pre = cur;
+        cur = next;
+      }
+      return pre;
+    }
+
 };
 // @lc code=end
 

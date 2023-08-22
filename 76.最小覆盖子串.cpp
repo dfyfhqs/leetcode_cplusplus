@@ -1,4 +1,12 @@
 /*
+ * @Author: stone stone
+ * @Date: 2023-08-12 17:14:13
+ * @LastEditors: stone stone
+ * @LastEditTime: 2023-08-12 18:06:05
+ * @FilePath: /leetcode_cplusplus/76.最小覆盖子串.cpp
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
+/*
  * @lc app=leetcode.cn id=76 lang=cpp
  *
  * [76] 最小覆盖子串
@@ -70,54 +78,9 @@
 class Solution {
 public:
     string minWindow(string s, string t) {
-      std::for_each(t.begin(), t.end(), [&](auto& val) {
-        count_[val]++;
-      });
-
-
-      int left = 0, right = 0;
-      while (right < s.length()) {
-        char rc = s[right];
-        auto findIter = count_.find(rc);
-        if (findIter == count_.end()) {
-          ++right;
-          continue;
-        }
-        if (++curCount_[rc] == findIter->second) {
-          valid_num_++;
-        }
-        //std::cout << "left: " << left << " right: " << right << " valid_num: " << valid_num_ << std::endl;
-
-        while (valid_num_ == count_.size() && left <= right) {
-          char lc = s[left];
-          if (resultRight - resultLeft > right - left) {
-            resultRight = right;
-            resultLeft = left;
-          }
-          auto findIter = count_.find(lc);
-          if (findIter == count_.end()) {
-            ++left;
-            continue;
-          }
-
-          if (--curCount_[lc] < findIter->second) {
-            valid_num_--;
-          }
-          ++left;
-        }
-        
-        ++right;
-      }
-      if (resultRight < s.size()) {
-        return s.substr(resultLeft, resultRight - resultLeft + 1); 
-      }
-      return "";
+      
     }
-    int valid_num_ = 0;
-    std::unordered_map<char, int> count_;
-    std::unordered_map<char, int> curCount_;
-    int resultLeft = 0;
-    int resultRight = INT_MAX;
+     
 
 };
 // @lc code=end

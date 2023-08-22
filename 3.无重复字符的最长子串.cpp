@@ -1,4 +1,12 @@
 /*
+ * @Author: stone stone
+ * @Date: 2023-08-12 17:14:13
+ * @LastEditors: stone stone
+ * @LastEditTime: 2023-08-12 18:04:08
+ * @FilePath: /leetcode_cplusplus/3.无重复字符的最长子串.cpp
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
+/*
  * @lc app=leetcode.cn id=3 lang=cpp
  *
  * [3] 无重复字符的最长子串
@@ -57,29 +65,31 @@
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
+      int result = 0;
       // 滑动窗口
+      std::unordered_set<char> label;
       int left = 0, right = 0;
-      while (right < s.size()) {
-        // 扩张滑动窗口
-        if (curStr_.count(s[right]) == 0) {
-          curStr_.insert(s[right]);
-          right++;
-        } else {
-          // 缩小窗口`
-          while (left <= right && curStr_.count(s[right]) == 0) {
-            curStr_.erase(s[left]);
-            left++;
+      for (; right < s.size(); ++right) {
+        char c = s[right];
+        if (label.count(c) == 0) {
+          label.insert(c);
+          if (right - left + 1 > result) {
+            result = right - left + 1;
           }
-          curStr_.erase(s[left]);
-          left++;
-          result_ = max(result_, right - left + 1);
+          continue;
+        }
+        while (left < right) {
+          if (s[left] == c) {
+            ++left;
+            break;
+          }
+          label.erase(s[left]);
+          ++left;
         }
       }
-      result_ = max(result_, right - left);
-      return result_;
+      return result;
     }
-    unordered_set<char> curStr_;
-    int result_ = 0;
+      
 };
 // @lc code=end
 
