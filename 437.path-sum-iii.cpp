@@ -57,4 +57,29 @@ class Solution {
   }
 };
 
+
+class Solution {
+public:
+    int pathSum(TreeNode* root, int targetSum) {
+      dfs(root, targetSum, true);
+      dfs(root, targetSum, false);
+      return result_;
+    }
+
+    void dfs(TreeNode* root, long targetSum, bool ischoose) {
+      if (root == nullptr) return;
+      if (ischoose) {
+        if (targetSum == root->val) {result_++;}
+        dfs(root->left, targetSum - root->val, true);
+        dfs(root->right, targetSum - root->val, true);
+      } else {
+        dfs(root->left, targetSum, true);
+        dfs(root->left, targetSum, false);
+        dfs(root->right, targetSum, true);
+        dfs(root->right, targetSum, false);
+      }
+    }
+    int result_;
+};
+
 // @leet end
