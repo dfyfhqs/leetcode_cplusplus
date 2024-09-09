@@ -1,5 +1,4 @@
 // @leet start
-/**
  * Definition for a binary tree node.
  * struct TreeNode {
  *     int val;
@@ -23,6 +22,17 @@ class Solution {
     int left = max(help(root->left), 0);
     int right = max(help(root->right), 0);
     result_ = max(left + right + root->val, result_);
+    dfs(root);
+    return result_;
+  }
+
+  int dfs(TreeNode* root) {
+    if (root == nullptr) {
+      return 0;
+    }
+    int left = max(dfs(root->left), 0);
+    int right = max(dfs(root->right), 0);
+    result_ = max(result_, left + right + root->val);
     return max(left, right) + root->val;
   }
 
